@@ -26,7 +26,7 @@ class Justify:
         if isinstance(self.bot, commands.AutoShardedBot):
             main_info.append(f'Bot shards: {", ".join(list(self.bot.shards))}')
 
-        await ctx.reply(main_info)
+        await ctx.reply('\n'.join(main_info))
 
     @commands.command(name='eval', aliases=['py'])
     async def justify_eval(self, ctx, *, code):
