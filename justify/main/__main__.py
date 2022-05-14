@@ -51,4 +51,5 @@ class Justify:
                 await ctx.send(f'Completed for `{end}` seconds')
             except Exception as e:
                 end = (datetime.now() - start).seconds
+                await ctx.reply(f'Completed for `{end}` seconds')
                 raise e
