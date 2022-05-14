@@ -1,11 +1,11 @@
-from disnake.ext import commands
+from typing import List
 
 
 class Justify:
 
-    def  __init__(self, bot) -> None:
-        self.bot = bot
+    def  __init__(self) -> None:
+        ...
 
-    @commands.group(name='justify', alises=['jst'], invoke_without_command=True)
-    async def main_justify(self, ctx):
-        await ctx.reply('Test successfully ended.')
+    def eval(self, code):
+        replaced_code = code.replace('`', '').replace('py', '') if code.startswith('```py') else code
+        return eval(replaced_code)
