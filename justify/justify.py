@@ -16,8 +16,8 @@ class JustifyCog(commands.Cog):
     @commands.group( name='justify', aliases=['jst'], invoke_without_command=True)
     async def jst(self, ctx: commands.Context):
         text = \
-            f"**Enabled intents:** {list(i[0] for i in self.bot.intents if i[-1])}\n" \
-            f'**Guilds:** {self.bot.guilds}\n' \
+            f"**Enabled intents:** {', '.join([i[0] for i in self.bot.intents if i[-1]])}\n" \
+            f'**Guilds:** {len(self.bot.guilds)}\n' \
             f'**Users:** {len(self.bot.users)}\n' \
             f'**Cached messages:** {len(self.bot.cached_messages)}\n' + \
             (f'**Bot shards:** {", ".join(list(self.bot.shards))}' if isinstance(self.bot, commands.AutoShardedBot) else "")
