@@ -4,7 +4,7 @@ from .main.__main__ import Justify
 from disnake.ext import commands
 
 
-class JustifyCog(commands.Cog, Justify):
+class JustifyCog(commands.Cog):
     
     """Loads justify cog."""
 
