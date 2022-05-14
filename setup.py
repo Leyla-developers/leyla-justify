@@ -13,7 +13,6 @@ setup(
 	description="Discord bot util",
 	long_description=README,
 	long_description_content_type="text/markdown",
-	url="https://github.com/MagM1go/Justify",
 	packages=find_packages(),
 	classifiers=[
 		"Programming Language :: Python :: 3.10",
