@@ -11,7 +11,7 @@ class JustifyUtils:
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
         
-        
+
     async def eval_code(self, ctx: commands.Context, code: str) -> Any | None:
         env = {
             'bot': self.bot,
