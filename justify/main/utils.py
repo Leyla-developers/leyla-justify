@@ -6,7 +6,7 @@ import disnake
 from disnake.ext import commands
 
 
-class Justify:
+class JustifyUtils:
 
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
