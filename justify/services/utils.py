@@ -6,8 +6,8 @@ from typing import Any, Union
 import datetime
 
 from aeval import aeval
-import disnake
-from disnake.ext import commands
+import discord
+from discord.ext import commands
 
 
 class JustifyUtils:
@@ -16,14 +16,13 @@ class JustifyUtils:
 
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
-        
 
     async def eval_code(self, ctx: commands.Context, code: str) -> Any | None:
         env = {
             'bot': self.bot,
             'ctx': ctx,
             'commands': commands,
-            'disnake': disnake,
+            'discord': discord,
             '__import__': __import__,
             'sys': sys,
             'os': os,

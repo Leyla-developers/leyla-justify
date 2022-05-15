@@ -1,10 +1,11 @@
 import time
 from typing import Union
 import sys
+import inspect
 
-import disnake
+import discord
 from .services.utils import JustifyUtils
-from disnake.ext import commands
+from discord.ext import commands
 
 
 class JustifyCog(commands.Cog):
@@ -17,7 +18,7 @@ class JustifyCog(commands.Cog):
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
         text = [
-            f'`{self.justify.__version__}, disnake-{disnake.__version__}, {sys.version}.`\n',
+            f'`{self.justify.__version__}, discord-{discord.__version__}, {sys.version}.`\n',
             f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
             f'Cached messages: **{len(self.bot.cached_messages)}**',
             f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
@@ -41,10 +42,11 @@ class JustifyCog(commands.Cog):
         finally:
             if result is not None:
                 await ctx.reply(result)
-                
+
             await ctx.message.add_reaction('✅')
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
+    @commands.is_owner()
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
         command = self.bot.get_command(cmd)
 
@@ -60,5 +62,11 @@ class JustifyCog(commands.Cog):
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
 
-def setup(bot):
+async def async_setup(bot):
     bot.add_cog(JustifyCog(bot))
+
+def setup(bot):
+    if inspect.iscoroutinefunction(bot.add_cog):
+        return async_setup(bot)
+
+    bot.add_cog(JustifyCog(bot=bot))
