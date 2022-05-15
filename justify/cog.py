@@ -39,7 +39,7 @@ class JustifyCog(commands.Cog):
             result = f"# An error occurred while executing the code :: \n```py\n{exception.__class__}: {exception}```" 
         
         finally:
-            await ctx.reply(result) if result is not None else None
+            await ctx.reply(result) if result is not None else await ctx.message.add_reaction('✅')
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
