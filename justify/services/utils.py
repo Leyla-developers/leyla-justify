@@ -29,7 +29,10 @@ class JustifyUtils:
             'os': os,
             'aiohttp': aiohttp,
             'requests': requests,
-            'datetime': datetime
+            'datetime': datetime,
+            'author': ctx.author,
+            'guild': ctx.guild,
+            'channel': ctx.message
         }
         
         return await aeval(code, env, {})
