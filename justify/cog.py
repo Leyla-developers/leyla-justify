@@ -36,7 +36,7 @@ class JustifyCog(commands.Cog):
 
         try:
             result = str(await self.justify.eval_code(ctx, safety_code))
-            
+
         except Exception as exception:
             result = f"# An error occurred while executing the code :: \n{exception.__class__}: {exception}"
         
