@@ -12,7 +12,8 @@ class JustifyCog(commands.Cog):
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
         self.justify = JustifyUtils(bot)
-
+    
+    @commands.is_owner()
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
         text = [
@@ -28,7 +29,6 @@ class JustifyCog(commands.Cog):
         await ctx.reply('\n'.join(text))
 
     @justify_main_command.command(name='eval', aliases=['py'])
-    @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py").replace(self.bot.http.token, 'token deleted from code') if text.startswith("```py") else text.replace(self.bot.http.token, 'token deleted from code') # Колбаска ^-^
         start = time.time()
