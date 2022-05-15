@@ -31,18 +31,30 @@ class JustifyCog(commands.Cog):
     @justify_main_command.command(name='eval', aliases=['py'])
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
-        start = time.time()
-        safety_code = code.replace(self.bot.http.token, 'token deleted.')
 
         try:
-            result = str(await self.justify.eval_code(ctx, safety_code))
+            result = str(await self.justify.eval_code(ctx, code))
 
         except Exception as exception:
-            result = f"# An error occurred while executing the code :: \n{exception.__class__}: {exception}"
+            result = f"# An error occurred while executing the code :: \n```py\n{exception.__class__}: {exception}```" 
         
         finally:
-            execution_time = round((time.time() - start)*1000, 2)
-            await ctx.send(f"Completed for **{execution_time} seconds.**\n{result}\n")
+            await ctx.reply(result) if result is not None else None
+
+    @justify_main_command.command(name='debug', aliases=['dbg'])
+    async def justify_debug(self, ctx: commands.Context, *, cmd: commands.Command):
+        command = self.bot.get_command(cmd)
+
+        if command is None:
+            return await ctx.reply('Command not found.')
+        
+
+        start = time.perf_counter()
+
+        await ctx.invoke(command)
+
+        end = time.perf_counter()
+        await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
 
 def setup(bot):
