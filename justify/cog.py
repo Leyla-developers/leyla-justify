@@ -29,6 +29,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply('\n'.join(text))
 
     @justify_main_command.command(name='eval', aliases=['py'])
+    @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
 
@@ -39,12 +40,10 @@ class JustifyCog(commands.Cog):
             result = f"# An error occurred while executing the code :: \n```py\n{exception.__class__}: {exception}```" 
         
         finally:
-            if result is not None:
-                await ctx.reply(result)
-            else:
-                await ctx.message.add_reaction('✅')
+            await self.justify.python_handler_result(ctx, result)
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
+    @commands.is_owner()
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
         command = self.bot.get_command(cmd)
 
@@ -59,6 +58,5 @@ class JustifyCog(commands.Cog):
         end = time.perf_counter()
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
-
 def setup(bot):
-    bot.add_cog(JustifyCog(bot))
+    bot.add_cog(JustifyCog(bot=bot))
