@@ -13,7 +13,6 @@ class Justify:
         
         
     async def eval_code(self, ctx: commands.Context, code: str) -> Any | None:
-        
         env = {
             'bot': self.bot,
             'ctx': ctx,
