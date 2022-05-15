@@ -1,3 +1,7 @@
+import sys
+import os
+import aiohttp
+import requests
 from typing import Any, Union
 from datetime import datetime
 
@@ -7,6 +11,8 @@ from disnake.ext import commands
 
 
 class JustifyUtils:
+
+    __version__ = 'justify-1.0'
 
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
@@ -18,7 +24,11 @@ class JustifyUtils:
             'ctx': ctx,
             'commands': commands,
             'disnake': disnake,
-            '__import__': __import__
+            '__import__': __import__,
+            'sys': sys,
+            'os': os,
+            'aiohttp': aiohttp,
+            'requests': requests,
         }
         
         return await aeval(code, env, {})
