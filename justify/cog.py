@@ -41,7 +41,7 @@ class JustifyCog(commands.Cog):
         
         finally:
             execution_time = (time.time() - start)
-            await ctx.send(f"Completed for **{execution_time} seconds.**\n```py\n{result}\n```")
+            await ctx.send(f"Completed for **{execution_time} seconds.**\n{result}\n")
 
 
 def setup(bot):
