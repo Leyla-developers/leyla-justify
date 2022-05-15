@@ -17,7 +17,7 @@ class JustifyCog(commands.Cog):
             f'**Guilds:** {len(self.bot.guilds)}\n' \
             f'**Users:** {len(self.bot.users)}\n' \
             f'**Cached messages:** {len(self.bot.cached_messages)}\n' + \
-            (f'**Bot shards:** {", ".join(list(self.bot.shards))}' if isinstance(self.bot, commands.AutoShardedBot) else "")
+            (f'**Bot shards:** {", ".join(str(i) for i in self.bot.shards)}' if isinstance(self.bot, commands.AutoShardedBot) else "")
             
         await ctx.reply(text)
 
@@ -34,7 +34,7 @@ class JustifyCog(commands.Cog):
             result = f"# Произошла ошибка при выполнении кода: \n{exception.__class__}: {exception}"
         
         finally:
-            execution_time = round(time.time() - start, 2)
+            execution_time = (time.time() - start)
             await ctx.send(f"Выполнено за **{execution_time} сек.**\n```py\n{result}\n```")
         
 
