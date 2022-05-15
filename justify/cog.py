@@ -16,8 +16,8 @@ class JustifyCog(commands.Cog):
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
         text = [
-            f'`justify-1.0, disnake-{disnake.__version__}, {sys.version}.`\n',
-            f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
+            f'`{self.justify.__version__}, disnake-{disnake.__version__}, {sys.version}.`\n',
+            #f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
             f'Cached messages: **{len(self.bot.cached_messages)}**',
             f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
         ]
