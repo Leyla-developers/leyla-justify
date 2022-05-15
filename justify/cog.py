@@ -48,7 +48,7 @@ class JustifyCog(commands.Cog):
         command = self.bot.get_command(cmd)
 
         if command is None:
-            return await ctx.reply('Command not found.')
+            return await ctx.reply('Команда не найдена!')
         
 
         start = time.perf_counter()
@@ -56,7 +56,7 @@ class JustifyCog(commands.Cog):
         await ctx.invoke(command)
 
         end = time.perf_counter()
-        await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
+        await ctx.reply(f"Команда `{command}` была исполнена за `{end - start:.3f}` секунд")
 
 def setup(bot):
     bot.add_cog(JustifyCog(bot=bot))
