@@ -30,11 +30,12 @@ class JustifyCog(commands.Cog):
 
     @justify_main_command.command(name='eval', aliases=['py'])
     async def justify_eval(self, ctx: commands.Context, *, text: str):
-        code = text.strip("\n").strip("```").lstrip("\n").lstrip("py").replace(self.bot.http.token, 'token deleted from code') if text.startswith("```py") else text.replace(self.bot.http.token, 'token deleted from code') # Колбаска ^-^
+        code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
         start = time.time()
-        
+        safety_code = code.replace(self.bot.http.token, 'token deleted.')
+
         try:
-            result = str(await self.justify.eval_code(ctx, code))
+            result = str(await self.justify.eval_code(ctx, safety_code))
             
         except Exception as exception:
             result = f"# An error occurred while executing the code :: \n{exception.__class__}: {exception}"
