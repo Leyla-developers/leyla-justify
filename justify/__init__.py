@@ -1,4 +1,4 @@
-from cog import *
+from .cog import *
 from .services import *
 
 __all__ = (
