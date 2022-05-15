@@ -42,7 +42,7 @@ class JustifyCog(commands.Cog):
             await ctx.reply(result) if result is not None else None
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
-    async def justify_debug(self, ctx: commands.Context, *, cmd: commands.Command):
+    async def justify_debug(self, ctx: commands.Context, *, cmd: str):
         command = self.bot.get_command(cmd)
 
         if command is None:
