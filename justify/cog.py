@@ -18,13 +18,13 @@ class JustifyCog(commands.Cog):
     async def justify_main_command(self, ctx: commands.Context):
         text = [
             f'`{self.justify.__version__}, nextcord-{nextcord.__version__}, {sys.version}.`\n',
-            f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
-            f'Cached messages: **{len(self.bot.cached_messages)}**',
-            f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
+            f'Серверов: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
+            f'Кэша: **{len(self.bot.cached_messages)}**',
+            f'```py\nВключённые интенты: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
         ]
 
         if isinstance(self.bot, commands.AutoShardedBot):
-            text.append(f'Shards:\n' + '```py\n' + '\n'.join(list(f"{i[0]} - {i[-1]*1000}" for i in self.bot.latencies)) + '```')
+            text.append(f'Шардов:\n' + '```py\n' + '\n'.join(list(f"{i[0]} - {i[-1]*1000}" for i in self.bot.latencies)) + '```')
 
         await ctx.reply('\n'.join(text))
 
