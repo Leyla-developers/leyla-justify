@@ -3,7 +3,7 @@ import os
 import aiohttp
 import requests
 from typing import Any, Union
-from datetime import datetime
+import datetime
 
 from aeval import aeval
 import disnake
@@ -29,6 +29,7 @@ class JustifyUtils:
             'os': os,
             'aiohttp': aiohttp,
             'requests': requests,
+            'datetime': datetime
         }
         
         return await aeval(code, env, {})
