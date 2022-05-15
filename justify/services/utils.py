@@ -35,3 +35,12 @@ class JustifyUtils:
         }
         
         return await aeval(code, env, {})
+
+    async def python_handler_result(self, ctx: commands.Context, result: str):
+        if isinstance(result, disnake.Message):
+            return await ctx.reply(f'Message({result.jump_url})')
+        
+        if self.bot.http.token:
+            result = result.replace(self.bot.http.token, 'token deleted from code.')
+        
+        await ctx.reply(result)
