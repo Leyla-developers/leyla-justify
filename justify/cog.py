@@ -41,8 +41,8 @@ class JustifyCog(commands.Cog):
         finally:
             if result is not None:
                 await ctx.reply(result)
-            else:
-                await ctx.message.add_reaction('✅')
+                
+            await ctx.message.add_reaction('✅')
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
