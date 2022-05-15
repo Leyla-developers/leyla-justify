@@ -6,8 +6,8 @@ from typing import Any, Union
 import datetime
 
 from aeval import aeval
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 
 
 class JustifyUtils:
@@ -22,7 +22,7 @@ class JustifyUtils:
             'bot': self.bot,
             'ctx': ctx,
             'commands': commands,
-            'discord': discord,
+            'disnake': disnake,
             '__import__': __import__,
             'sys': sys,
             'os': os,

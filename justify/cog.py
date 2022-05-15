@@ -1,11 +1,10 @@
 import time
 from typing import Union
 import sys
-import inspect
 
-import discord
+import disnake
 from .services.utils import JustifyUtils
-from discord.ext import commands
+from disnake.ext import commands
 
 
 class JustifyCog(commands.Cog):
@@ -18,7 +17,7 @@ class JustifyCog(commands.Cog):
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
         text = [
-            f'`{self.justify.__version__}, discord-{discord.__version__}, {sys.version}.`\n',
+            f'`{self.justify.__version__}, disnake-{disnake.__version__}, {sys.version}.`\n',
             f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
             f'Cached messages: **{len(self.bot.cached_messages)}**',
             f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
@@ -30,6 +29,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply('\n'.join(text))
 
     @justify_main_command.command(name='eval', aliases=['py'])
+    @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
 
@@ -61,12 +61,5 @@ class JustifyCog(commands.Cog):
         end = time.perf_counter()
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
-
-async def async_setup(bot):
-    bot.add_cog(JustifyCog(bot))
-
 def setup(bot):
-    if inspect.iscoroutinefunction(bot.add_cog):
-        return async_setup(bot)
-
     bot.add_cog(JustifyCog(bot=bot))
