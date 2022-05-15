@@ -1,6 +1,6 @@
 import time
 from typing import Union
-from .main.utils import JustifyUtils
+from .services.utils import JustifyUtils
 from disnake.ext import commands
 
 

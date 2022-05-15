@@ -1,5 +1,5 @@
 from justify import *
-from .main import *
+from .services import *
 
 __all__ = (
     'JustifyCog',
