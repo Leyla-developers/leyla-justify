@@ -41,7 +41,7 @@ class JustifyCog(commands.Cog):
             result = f"# An error occurred while executing the code :: \n{exception.__class__}: {exception}"
         
         finally:
-            execution_time = (time.time() - start)
+            execution_time = round((time.time() - start)*1000, 2)
             await ctx.send(f"Completed for **{execution_time} seconds.**\n{result}\n")
 
 
