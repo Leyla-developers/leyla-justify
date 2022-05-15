@@ -14,7 +14,7 @@ class JustifyCog(commands.Cog):
         self.justify = JustifyUtils(bot)
 
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
-    async def jst(self, ctx: commands.Context):
+    async def justify_main_command(self, ctx: commands.Context):
         text = (
             f'{self.justify.__version__}, disnake-{disnake.__version__}, {sys.version}.\n',
             f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
@@ -23,13 +23,13 @@ class JustifyCog(commands.Cog):
         )
 
         if isinstance(self.bot, commands.AutoShardedBot):
-            text.append(f'Shards: ' + ', '.join(list(f"{i[0]} - {i[-1]}" for i in self.bot.latencies)))
+            text.append(f'Shards:\n' + '\n'.join(list(f"{i[0]} - {i[-1]*1000}" for i in self.bot.latencies)))
 
         await ctx.reply(text)
 
     @jst.command(name='eval', aliases=['py'])
     @commands.is_owner()
-    async def eval(self, ctx: commands.Context, *, text: str):
+    async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py").replace(self.bot.http.token, 'token deleted from code') if text.startswith("```py") else text.replace(self.bot.http.token, 'token deleted from code') # Колбаска ^-^
         start = time.time()
         
