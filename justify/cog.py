@@ -15,19 +15,19 @@ class JustifyCog(commands.Cog):
 
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
-        text = (
-            f'{self.justify.__version__}, disnake-{disnake.__version__}, {sys.version}.\n',
+        text = [
+            f'`justify-1.0, disnake-{disnake.__version__}, {sys.version}.`\n',
             f'Guilds: **{len(self.bot.guilds)}**, users: **{len(self.bot.users)}**',
-            f'Cached messages: **{len(self.bot.cached_messages)}**\n',
-            f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```\n'
-        )
+            f'Cached messages: **{len(self.bot.cached_messages)}**',
+            f'```py\nEnabled intents: {", ".join([i[0] for i in self.bot.intents if i[-1]])}```'
+        ]
 
         if isinstance(self.bot, commands.AutoShardedBot):
-            text.append(f'Shards:\n' + '\n'.join(list(f"{i[0]} - {i[-1]*1000}" for i in self.bot.latencies)))
+            text.append(f'Shards:\n' + '```py\n' + '\n'.join(list(f"{i[0]} - {i[-1]}" for i in self.bot.latencies)) + '```')
 
-        await ctx.reply(text)
+        await ctx.reply('\n'.join(text))
 
-    @jst.command(name='eval', aliases=['py'])
+    @justify_main_command.command(name='eval', aliases=['py'])
     @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py").replace(self.bot.http.token, 'token deleted from code') if text.startswith("```py") else text.replace(self.bot.http.token, 'token deleted from code') # Колбаска ^-^
@@ -42,7 +42,7 @@ class JustifyCog(commands.Cog):
         finally:
             execution_time = (time.time() - start)
             await ctx.send(f"Completed for **{execution_time} seconds.**\n```py\n{result}\n```")
-        
+
 
 def setup(bot):
     bot.add_cog(JustifyCog(bot))
