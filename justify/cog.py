@@ -37,7 +37,7 @@ class JustifyCog(commands.Cog):
             result = str(await self.justify.eval_code(ctx, code))
 
         except Exception as exception:
-            result = f"# An error occurred while executing the code :: \n```py\n{exception.__class__}: {exception}```" 
+            result = f"```py\n# An error occurred while executing the code :: \n{exception.__class__}: {exception}```" 
         
         finally:
             await self.justify.python_handler_result(ctx, result)
@@ -47,16 +47,40 @@ class JustifyCog(commands.Cog):
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
         command = self.bot.get_command(cmd)
 
-        if command is None:
+        if not command:
             return await ctx.reply('Command not found.')
         
-
         start = time.perf_counter()
 
         await ctx.invoke(command)
 
         end = time.perf_counter()
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
+
+    @justify_main_command.command(name="load", aliases=['ld'])
+    async def justify_load(self, ctx: commands.Context, paths):
+        list_of_paths = paths.split(paths)
+        for i in list_of_paths:
+            await self.bot.load_extension(i)
+        
+        await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was loaded ✅')
+
+    @justify_main_command.command(name="unload", aliases=['uld'])
+    async def justify_unload(self, ctx: commands.Context, paths):
+        list_of_paths = paths.split(paths)
+        for i in list_of_paths:
+            await self.bot.unload_extension(i)
+        
+        await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was unloaded ✅')
+
+    @justify_main_command.command(name="reload", aliases=['rld'])
+    async def justify_reload(self, ctx: commands.Context, paths):
+        list_of_paths = paths.split(paths)
+        for i in list_of_paths:
+            await self.bot.reload_extension(i)
+        
+        await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was reloaded ✅')
+
 
 def setup(bot):
     bot.add_cog(JustifyCog(bot=bot))

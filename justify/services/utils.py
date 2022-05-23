@@ -4,6 +4,7 @@ import aiohttp
 import requests
 from typing import Any, Union
 import datetime
+import subprocess
 
 from aeval import aeval
 import disnake
@@ -31,10 +32,12 @@ class JustifyUtils:
             'datetime': datetime,
             'author': ctx.author,
             'guild': ctx.guild,
-            'channel': ctx.message
+            'channel': ctx.message,
+            'subprocess': subprocess
         }
         
         return await aeval(code, env, {})
+
 
     async def python_handler_result(self, ctx: commands.Context, result: str):
         if isinstance(result, disnake.Message):
@@ -42,5 +45,8 @@ class JustifyUtils:
         
         if self.bot.http.token:
             result = result.replace(self.bot.http.token, 'token deleted from code.')
-        
+
+        if not isinstance(result, str):
+            result = repr(result)
+
         await ctx.reply(result)
