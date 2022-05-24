@@ -61,7 +61,11 @@ class JustifyCog(commands.Cog):
     async def justify_load(self, ctx: commands.Context, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
-            await self.bot.load_extension(i)
+            try:
+                await self.bot.load_extension(i)
+            except:
+                await self.bot.unload_extension(i)
+                await self.bot.load_extension(i)
         
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was loaded ✅')
 
@@ -69,7 +73,11 @@ class JustifyCog(commands.Cog):
     async def justify_unload(self, ctx: commands.Context, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
-            await self.bot.unload_extension(i)
+            try:
+                await self.bot.unload_extension(i)
+            except:
+                await self.bot.load_extension(i)
+                await self.bot.unload_extension(i)
         
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was unloaded ✅')
 
