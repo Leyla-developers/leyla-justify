@@ -58,6 +58,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
     @justify_main_command.command(name="load", aliases=['ld'])
+    @commands.is_owner()
     async def justify_load(self, ctx: commands.Context, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
@@ -70,6 +71,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was loaded ✅')
 
     @justify_main_command.command(name="unload", aliases=['uld'])
+    @commands.is_owner()
     async def justify_unload(self, ctx: commands.Context, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
@@ -82,6 +84,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was unloaded ✅')
 
     @justify_main_command.command(name="reload", aliases=['rld'])
+    @commands.is_owner()
     async def justify_reload(self, ctx: commands.Context, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:

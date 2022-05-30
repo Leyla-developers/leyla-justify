@@ -7,6 +7,8 @@ import datetime
 import subprocess
 
 from aeval import aeval
+from textwrap3 import wrap
+from .paginator import JustifyPaginatorInterface
 import disnake
 from disnake.ext import commands
 
@@ -40,6 +42,8 @@ class JustifyUtils:
 
 
     async def python_handler_result(self, ctx: commands.Context, result: str):
+        paginator = None
+
         if isinstance(result, disnake.Message):
             return await ctx.reply(f'Message({result.jump_url})')
         
@@ -48,5 +52,9 @@ class JustifyUtils:
 
         if not isinstance(result, str):
             result = repr(result)
+        
+        if len(result) >= 2000:
+            paginator = JustifyPaginatorInterface(wrap(result, 2000))
+            result = '```\n' + result + '```' 
 
-        await ctx.reply(result)
+        await ctx.reply(result, view=paginator)
