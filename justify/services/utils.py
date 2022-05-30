@@ -45,7 +45,7 @@ class JustifyUtils:
 
 
     def remove_token_references(self, text: str):
-        return text.replace("bot.http.token", "'TokenOmitted'")
+        return text.replace("bot.http.token", "token omitted")
     
 
     async def python_handler_result(self, ctx: commands.Context, result: str):
