@@ -57,7 +57,7 @@ class JustifyUtils:
         if not isinstance(result, str):
             result = repr(result)
         
-        if len(result) >= 1994:
+        if len(result) >= 2000:
             paginator = JustifyPaginatorInterface(pages := [f"```{p}```" for p in wrap(result, 2000)])
             result = pages[0]
 
@@ -68,4 +68,4 @@ class JustifyUtils:
         cmds = commands.split()
         byte_to_str = subprocess.check_output(cmds).decode('utf-8')
 
-        await self._python_handler_result(ctx, result=f'$ {" ".join(cmds)}\n\n' + byte_to_str + "\n[Finished].", prefix='```bash', suffix='```')
+        return f'$ {" ".join(cmds)}\n\n' + byte_to_str

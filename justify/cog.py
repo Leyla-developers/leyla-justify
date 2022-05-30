@@ -104,7 +104,7 @@ class JustifyCog(commands.Cog):
 
     @justify_main_command.command(name='shell', aliases=['sh', 'bash'])
     async def justify_shell(self, ctx, *, commands: str):
-        await self.justify.shell_reader(ctx=ctx, commands=commands)
+        await self.justify._python_handler_result(ctx, result=await self.justify.shell_reader(ctx=ctx, commands=commands), prefix='```bash', suffix='```')
 
 
 def setup(bot):
