@@ -32,7 +32,7 @@ class JustifyCog(commands.Cog):
     @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
-
+        
         try:
             result = str(await self.justify.eval_code(ctx, code))
 
