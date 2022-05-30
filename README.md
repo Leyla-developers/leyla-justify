@@ -1,4 +1,4 @@
-#### Justify
+# Justify
 
 Examples:
     > jst eval|py random.randint(1, 10)
