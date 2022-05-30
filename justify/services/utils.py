@@ -58,7 +58,7 @@ class JustifyUtils:
             result = repr(result)
         
         if len(result) >= 2000:
-            paginator = JustifyPaginatorInterface(wrap(result, 2000))
+            paginator = JustifyPaginatorInterface([f"```{p}```" for p in wrap(result, 2000)])
             result = result[0]
 
         await ctx.reply(result, view=paginator)
