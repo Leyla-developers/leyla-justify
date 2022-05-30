@@ -57,7 +57,7 @@ class JustifyUtils:
         if not isinstance(result, str):
             result = repr(result)
         
-        if len(result) >= 2000:
+        if len(result) >= 1994:
             paginator = JustifyPaginatorInterface(pages := [f"```{p}```" for p in wrap(result, 2000)])
             result = pages[0]
 
