@@ -1,6 +1,7 @@
 # Justify
 
 Examples:
+
     > jst eval|py random.randint(1, 10)
     My Incredible Bot: 7
 
