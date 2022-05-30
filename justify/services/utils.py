@@ -5,6 +5,7 @@ import requests
 from typing import Any, Union
 import datetime
 import subprocess
+import random
 
 from aeval import aeval
 from textwrap3 import wrap
@@ -34,8 +35,10 @@ class JustifyUtils:
             'datetime': datetime,
             'author': ctx.author,
             'guild': ctx.guild,
-            'channel': ctx.message,
-            'subprocess': subprocess
+            'message': ctx.message,
+            'subprocess': subprocess,
+            'channel': ctx.channel,
+            'random': random
         }
         
         return await aeval(code, env, {})
@@ -55,6 +58,6 @@ class JustifyUtils:
         
         if len(result) >= 2000:
             paginator = JustifyPaginatorInterface(wrap(result, 2000))
-            result = '```\n' + result + '```' 
+            result = result[0]
 
         await ctx.reply(result, view=paginator)
