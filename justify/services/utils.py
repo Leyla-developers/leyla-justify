@@ -45,10 +45,10 @@ class JustifyUtils:
 
 
     def remove_token_references(self, text: str):
-        return text.replace("bot.http.token", "'token omitted'")
+        return text.replace(self.bot.http.token, "'token omitted'")
     
 
-    async def python_handler_result(self, ctx: commands.Context, result: str):
+    async def _python_handler_result(self, ctx: commands.Context, result: str, prefix='', suffix=''):
         paginator = None
 
         if isinstance(result, disnake.Message):
@@ -58,7 +58,14 @@ class JustifyUtils:
             result = repr(result)
         
         if len(result) >= 2000:
-            paginator = JustifyPaginatorInterface([f"```{p}```" for p in wrap(result, 2000)])
-            result = result[0]
+            paginator = JustifyPaginatorInterface(pages := [f"```{p}```" for p in wrap(result, 2000)])
+            result = pages[0]
 
-        await ctx.reply(result, view=paginator)
+        await ctx.reply(f'{prefix}\n{result}{suffix}', view=paginator)
+
+
+    async def shell_reader(self, ctx, *, commands: str):
+        cmds = commands.split()
+        byte_to_str = subprocess.check_output(cmds).decode('utf-8')
+
+        await self._python_handler_result(ctx, result=f'$ {" ".join(cmds)}\n\n' + byte_to_str + "\n[Finished].", prefix='```bash', suffix='```')

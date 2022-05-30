@@ -1,6 +1,7 @@
 import time
 from typing import Union
 import sys
+from pathlib import Path
 
 import disnake
 from .services.utils import JustifyUtils
@@ -12,8 +13,15 @@ class JustifyCog(commands.Cog):
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
         self.justify = JustifyUtils(bot)
-    
-    @commands.is_owner()
+
+
+    def cog_check(self, ctx: commands.Context) -> bool:
+        if not ctx.author.id in self.bot.owner_ids:
+            raise commands.NotOwner('You must be a bot owner to use justify')
+
+        return True
+
+
     @commands.group(name='justify', aliases=['jst'], invoke_without_command=True)
     async def justify_main_command(self, ctx: commands.Context):
         text = [
@@ -29,10 +37,9 @@ class JustifyCog(commands.Cog):
         await ctx.reply('\n'.join(text))
 
     @justify_main_command.command(name='eval', aliases=['py'])
-    @commands.is_owner()
     async def justify_eval(self, ctx: commands.Context, *, text: str):
         code = text.strip("\n").strip("```").lstrip("\n").lstrip("py") if text.startswith("```py") else text # Колбаска ^-^
-        
+
         try:
             result = str(await self.justify.eval_code(ctx, code))
 
@@ -40,10 +47,9 @@ class JustifyCog(commands.Cog):
             result = f"```py\n# An error occurred while executing the code :: \n{exception.__class__}: {exception}```" 
         
         finally:
-            await self.justify.python_handler_result(ctx, result)
+            await self.justify._python_handler_result(ctx, result)
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
-    @commands.is_owner()
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
         command = self.bot.get_command(cmd)
 
@@ -58,8 +64,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply(f"Command `{command}` completed in `{end - start:.3f}` seconds")
 
     @justify_main_command.command(name="load", aliases=['ld'])
-    @commands.is_owner()
-    async def justify_load(self, ctx: commands.Context, paths):
+    async def justify_load(self, ctx: commands.Context, *, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
             try:
@@ -71,8 +76,7 @@ class JustifyCog(commands.Cog):
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was loaded ✅')
 
     @justify_main_command.command(name="unload", aliases=['uld'])
-    @commands.is_owner()
-    async def justify_unload(self, ctx: commands.Context, paths):
+    async def justify_unload(self, ctx: commands.Context, *, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
             try:
@@ -84,13 +88,23 @@ class JustifyCog(commands.Cog):
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was unloaded ✅')
 
     @justify_main_command.command(name="reload", aliases=['rld'])
-    @commands.is_owner()
-    async def justify_reload(self, ctx: commands.Context, paths):
+    async def justify_reload(self, ctx: commands.Context, *, paths):
         list_of_paths = paths.split(paths)
         for i in list_of_paths:
             await self.bot.reload_extension(i)
         
         await ctx.reply(' '.join(list_of_paths) + f'cog{"" if len(paths) == 0 else "s"} was reloaded ✅')
+
+    @justify_main_command.command(name='cat')
+    async def justify_cat(self, ctx, path):
+        if len(list(Path().glob(pattern=path))):
+            await self.justify._python_handler_result(ctx, open(path).read(), prefix='```py', suffix='```')
+        else:
+            await ctx.reply(f'Path `{path}` not found.')
+
+    @justify_main_command.command(name='shell', aliases=['sh', 'bash'])
+    async def justify_shell(self, ctx, *, commands: str):
+        await self.justify.shell_reader(ctx=ctx, commands=commands)
 
 
 def setup(bot):
