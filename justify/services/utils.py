@@ -48,7 +48,7 @@ class JustifyUtils:
         return text.replace(self.bot.http.token, "'token omitted'")
     
 
-    async def _python_handler_result(self, ctx: commands.Context, result: str, prefix='', suffix=''):
+    async def _python_handler_result(self, ctx: commands.Context, result: str, prefix='', suffix='', length=2000):
         paginator = None
 
         if isinstance(result, disnake.Message):
@@ -58,14 +58,15 @@ class JustifyUtils:
             result = repr(result)
         
         if len(result) >= 2000:
-            paginator = JustifyPaginatorInterface(pages := [f"```{p}```" for p in wrap(result, 2000)])
+            paginator = JustifyPaginatorInterface(pages := [f"```{p}```" for p in wrap(result, length)])
             result = pages[0]
 
         await ctx.reply(f'{prefix}\n{result}{suffix}', view=paginator)
 
 
-    async def shell_reader(self, ctx, *, commands: str):
+    async def shell_reader(self, ctx, commands: str) -> str:
         cmds = commands.split()
         byte_to_str = subprocess.check_output(cmds).decode('utf-8')
+        result = '$ ' + "\n".join(cmds) + '\n\n' + byte_to_str
 
-        return f'$ {" ".join(cmds)}\n\n' + byte_to_str
+        return await self._python_handler_result(ctx, result, length=1900)
