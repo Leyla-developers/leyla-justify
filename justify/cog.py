@@ -12,11 +12,11 @@ class JustifyCog(commands.Cog):
     """Loads justify cog."""
     def  __init__(self, bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
         self.bot = bot
-        self.justify = JustifyUtils(bot)
+        self.justify = JustifyUtils()
 
 
-    def cog_check(self, ctx: commands.Context) -> bool:
-        if not ctx.author.id in self.bot.owner_ids:
+    async def cog_check(self, ctx: commands.Context) -> bool:
+        if not await ctx.bot.is_owner(ctx.author):
             raise commands.NotOwner('You must be a bot owner to use justify')
 
         return True
@@ -47,7 +47,7 @@ class JustifyCog(commands.Cog):
             result = f"```py\n# An error occurred while executing the code :: \n{exception.__class__}: {exception}```" 
         
         finally:
-            await self.justify._python_handler_result(ctx, result)
+            await self.justify._python_handler_result(ctx, result, length=1980)
 
     @justify_main_command.command(name='debug', aliases=['dbg'])
     async def justify_debug(self, ctx: commands.Context, *, cmd: str):
@@ -97,14 +97,25 @@ class JustifyCog(commands.Cog):
 
     @justify_main_command.command(name='cat')
     async def justify_cat(self, ctx, path):
-        if len(list(Path().glob(pattern=path))):
-            await self.justify._python_handler_result(ctx, open(path).read(), prefix='```py', suffix='```')
+        source = list(Path().glob(pattern=path))
+        if '.env' in path:
+            return await ctx.reply(f'File `{path}` not found.')
+        elif len(source):
+            await self.justify._python_handler_result(ctx, open(path).read(), prefix='```py', suffix='```', length=1980)
         else:
-            await ctx.reply(f'Path `{path}` not found.')
+            await ctx.reply(f'File `{path}` not found.')
+
+    # @justify_main_command.command(name='src')
+    # async def justify_command_source(self, ctx):
+
 
     @justify_main_command.command(name='shell', aliases=['sh', 'bash'])
     async def justify_shell(self, ctx, *, commands: str):
-        await self.justify._python_handler_result(ctx, result=await self.justify.shell_reader(ctx=ctx, commands=commands), prefix='```bash', suffix='```')
+        await self.justify._python_handler_result(ctx, 
+            result=await self.justify.shell_reader(
+                ctx=ctx, commands=commands
+            ), prefix='```bash', suffix='```'
+        )
 
 
 def setup(bot):
